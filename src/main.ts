@@ -1,12 +1,11 @@
-const express = require('express')
-import { Request, Response } from 'express'
-const app = express()
-const port = 3300
+import TodoController from './api/v1/todo_controller';
 
+const express = require('express');
+const app = express();
+const port = 3300;
 
-app.get('/', (req: Request, res: Response) => { res.send('We did it again') }
-)
+TodoController(app);
 
 app.listen(port, () => {
-    console.log(`ToDo API Running on port ${port}`)
-})
+  console.log(`ToDo API Running on port ${port}`);
+});
