@@ -56,4 +56,26 @@ editor. It may not be necessary if since we're using Typescript-TBD.
 
 ## DB setup
 
-- Install [PostgreSQL](https://www.postgresql.org) locally. Use of [docker](https://www.docker.com/products/docker-desktop/) is recommended but not necessary. If you choose to use docker then you can use the [offical postgres image](https://hub.docker.com/_/postgres)
+Install [PostgreSQL](https://www.postgresql.org) locally. Use of
+[docker](https://www.docker.com/products/docker-desktop/) is recommended but
+not necessary. If you choose to use docker then you can use the [official
+postgres image](https://hub.docker.com/_/postgres).
+
+```shell
+  docker pull postgres
+
+  docker run -d --name mypostgres -p 5432:5432 \
+    -e POSTGRES_PASSWORD=yourpassword postgres
+
+  npm i
+
+  # Connect to the database and run up migrations
+
+  DATABASE_URL="postgres://postgres:yourpassword@localhost:5432/todo_app?sslmode=disable"\
+    npx dbmate up
+```
+
+It can be convenient to use a GUI database client like
+[DBVisualizer](https://www.dbvis.com) or
+[this plugin](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
+for VSCode.
