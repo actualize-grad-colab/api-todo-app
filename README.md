@@ -53,3 +53,7 @@ somewhere between a formatter and a compiler. It reads your code and checks it
 for errors. It also checks for style issues. It helps keep code consistent and
 can help guide you in the right direction. This tool also gets setup in your
 editor. It may not be necessary if since we're using Typescript-TBD.
+
+## DB setup
+
+- Install [PostgreSQL](https://www.postgresql.org) locally. Use of [docker](https://www.docker.com/products/docker-desktop/) is recommended but not necessary. If you choose to use docker then you can use the [offical postgres image](https://hub.docker.com/_/postgres)
