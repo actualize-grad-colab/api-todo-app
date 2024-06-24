@@ -2,6 +2,9 @@
   "name": "api-todo-app",
   "version": "1.0.0",
   "scripts": {
+    "start": "node --env-file=./config/local.env -r ts-node/register ./src/main.ts",
+    "db:up": "dbmate up",
+    "db:seed": "psql -U postgres --dbname=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable -f ./db/seeds/dev.data.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

@@ -26,7 +26,7 @@ to happen automattically in your editor.
 Compiler and Type Checker
 
 [Typescript](https://www.typescriptlang.org) is awesome, but may be a pain in the
-butt initially. Here's some suff gh copilot says about it:
+butt initially. Here's what GitHub copilot says about it:
 
 _Typescript is a typed superset of JavaScript that compiles to plain
 JavaScript. It is a language that is developed and maintained by Microsoft. It
@@ -64,18 +64,24 @@ postgres image](https://hub.docker.com/_/postgres).
 ```shell
   docker pull postgres
 
-  docker run -d --name mypostgres -p 5432:5432 \
-    -e POSTGRES_PASSWORD=yourpassword postgres
+  docker run -d --name todo_app -p 5432:5432 \
+    -e POSTGRES_PASSWORD=badpassword postgres
 
   npm i
 
   # Connect to the database and run up migrations
 
-  DATABASE_URL="postgres://postgres:yourpassword@localhost:5432/todo_app?sslmode=disable"\
+  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable"\
     npx dbmate up
 ```
 
-It can be convenient to use a GUI database client like
+It is convenient to use a GUI database client like
 [DBVisualizer](https://www.dbvis.com) or
 [this plugin](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
-for VSCode.
+for Visual Studio Code.
+
+The postgres client `psql` needs to be installed to run `npm run db: ` commands. This may change.
+
+```shell
+brew install libpg &&   echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc
+```

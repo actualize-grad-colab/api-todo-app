@@ -1,4 +1,9 @@
 -- This makes a good case for using variables in the SQL
+
+BEGIN;
+
+SET transaction READ WRITE;
+
 INSERT INTO account_profiles (username, email, pwd)
 VALUES ('johndoe', 'actualize-grad-colab-testuser@gmail.com', 'password123');
 
@@ -9,7 +14,7 @@ SELECT
     'JDoe' AS display_name,
     profile_id
 FROM account_profiles
-WHERE username = 'jondoe';
+WHERE username = 'johndoe';
 
 INSERT INTO todos (title, body, user_id)
 SELECT
@@ -34,3 +39,5 @@ CROSS JOIN tags
 WHERE
     todos.title = 'Buy milk'
     AND tags.label = 'Groceries';
+
+COMMIT;
