@@ -2,7 +2,7 @@
 
 BEGIN;
 
-SET transaction READ WRITE;
+SET transaction READ_WRITE;
 
 INSERT INTO account_profiles (username, email, pwd)
 VALUES ('johndoe', 'actualize-grad-colab-testuser@gmail.com', 'password123');

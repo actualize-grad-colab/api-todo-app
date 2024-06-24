@@ -1,0 +1,17 @@
+  ~/code/actualize-grad-colab/api-todo-
+   config
+   db
+     migrations
+     seeds
+   │  my-postgres.conf
+   └  schema.sql
+   src
+     models
+   │ │  base.ts                      
+   │ └  todos.ts
+     routes
+   └  main.ts
+    README.md
+    package-lock.json
+    package.json
+   (5 hidden items)
