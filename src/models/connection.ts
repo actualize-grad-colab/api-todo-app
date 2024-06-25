@@ -8,10 +8,10 @@ const pool = new Pool();
  * This way we can eventually pass in a fake version of pool for testing.
  * Don't worry if it doesn't make sene yet.
  */
-export const query = (
+export const query = async (
   text: string,
   params: any,
-  callback: (err: Error, result: pg.QueryResult<any>) => void,
+
 ) => {
-  return pool.query(text, params, callback);
+  return await pool.query(text, params);
 };
