@@ -26,7 +26,7 @@ to happen automattically in your editor.
 Compiler and Type Checker
 
 [Typescript](https://www.typescriptlang.org) is awesome, but may be a pain in the
-butt initially. Here's some suff gh copilot says about it:
+butt initially. Here's what GitHub copilot says about it:
 
 _Typescript is a typed superset of JavaScript that compiles to plain
 JavaScript. It is a language that is developed and maintained by Microsoft. It
@@ -53,3 +53,35 @@ somewhere between a formatter and a compiler. It reads your code and checks it
 for errors. It also checks for style issues. It helps keep code consistent and
 can help guide you in the right direction. This tool also gets setup in your
 editor. It may not be necessary if since we're using Typescript-TBD.
+
+## DB setup
+
+Install [PostgreSQL](https://www.postgresql.org) locally. Use of
+[docker](https://www.docker.com/products/docker-desktop/) is recommended but
+not necessary. If you choose to use docker then you can use the [official
+postgres image](https://hub.docker.com/_/postgres).
+
+```shell
+  docker pull postgres
+
+  docker run -d --name todo_app -p 5432:5432 \
+    -e POSTGRES_PASSWORD=badpassword postgres
+
+  npm i
+
+  # Connect to the database and run up migrations
+
+  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable"\
+    npx dbmate up
+```
+
+It is convenient to use a GUI database client like
+[DBVisualizer](https://www.dbvis.com) or
+[this plugin](https://marketplace.visualstudio.com/items?itemName=ckolkman.vscode-postgres)
+for Visual Studio Code.
+
+The postgres client `psql` needs to be installed to run `npm run db: ` commands. This may change.
+
+```shell
+brew install libpg &&   echo 'export PATH="/usr/local/opt/libpq/bin:$PATH"' >> ~/.zshrc
+```
