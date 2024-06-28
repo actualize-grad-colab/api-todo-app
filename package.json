@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node --env-file=./config/local.env -r ts-node/register ./src/main.ts",
-    "db:up": "dbmate up",
+    "db:up": "dbmate --url=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable up",
     "db:seed": "psql -U postgres --dbname=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable -f ./db/seeds/dev.data.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.4.0",
+    "@types/cors": "^2.8.17",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^4.17.21",
     "@types/node": "^20.13.0",

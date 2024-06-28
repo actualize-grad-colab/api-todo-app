@@ -1,18 +1,23 @@
 import express from "express";
 import cors from "cors";
 import * as data from "./models/data";
-import { Request, Response } from "express";
-const app = express();
 const port = 3300;
 
-const BASE = `/api/v1`;
+const app = express();
 
-app.get("/", (_req: Request, res: Response) => {
-  res.send("We did it again");
-});
-app.get("${BASE}/todos", async (req, res, next) => {
+const allowedOrigins = ["http://localhost:3000"];
+
+const options: cors.CorsOptions = {
+  origin: allowedOrigins,
+};
+
+app.use(cors(options));
+
+const BASE = "/api/v1";
+
+app.get(`${BASE}/todos`, async (req, res, next) => {
   const result = await data.gettodo();
-  res.send(result.rows[0]);
+  res.send({ todos: result.rows });
 });
 
 app.listen(port, () => {
