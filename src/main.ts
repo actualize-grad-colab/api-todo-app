@@ -12,6 +12,7 @@ const options: cors.CorsOptions = {
   origin: allowedOrigins,
 };
 
+app.use(express.json());
 app.use(cors(options));
 
 const BASE = "/api/v1";
