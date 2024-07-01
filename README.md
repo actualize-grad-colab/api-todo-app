@@ -64,15 +64,13 @@ postgres image](https://hub.docker.com/_/postgres).
 ```shell
   docker pull postgres
 
-  docker run -d --name todo_app -p 5432:5432 \
-    -e POSTGRES_PASSWORD=badpassword postgres
+  docker run -d --name todo_app -p 5432:5432 -e POSTGRES_PASSWORD=badpassword postgres
 
   npm i
 
   # Connect to the database and run up migrations
 
-  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable"\
-    npx dbmate up
+  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable" npx dbmate up
 ```
 
 It is convenient to use a GUI database client like
