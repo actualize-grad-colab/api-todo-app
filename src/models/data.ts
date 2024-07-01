@@ -1,3 +1,8 @@
+// INFO: This file should be moved from src/models/data.ts to src/data/totdos.ts
+// Then have a file src/models/todo.ts which takes this module as a dependency
+// If done correctly, this will allow us to test each layer (route, model,
+// db-querries) to be tested independently. Oh, which reminds me...
+// TODO: Setup unit tests
 import { query } from "./connection";
 
 /*
@@ -7,10 +12,7 @@ import { query } from "./connection";
  */
 
 type CreateTodoParams = { title: string; body: string; user_id: number };
-// type UpdateTodoParams = CreateTodoParams + todo_id;
-type TodoRecord = { id: number; title: string; body: string; user_id: number };
-// type TodoModel = {}
-// type TodoResponse = {}
+type UpdateTodoParams = { title: string; body: string; todo_id: number };
 
 export async function all() {
   const result = await query("SELECT * FROM todos;", []);
@@ -28,5 +30,19 @@ export async function createTodo({ title, body, user_id }: CreateTodoParams) {
     [title, body, user_id],
   );
   // TODO: Create model instance
+  return result.rows;
+}
+
+// TODO: todo needs a "complete" flag
+export async function updateTodo({ title, body, todo_id }: UpdateTodoParams) {
+  const result = await query(
+    "UPDATE todos SET title = $1, body = $2 WHERE todo_id = $3;",
+    [title, body, todo_id],
+  );
+  return result.rows;
+}
+
+export async function deleteTodo(id: number) {
+  const result = await query("DELETE FROM todos WHERE todo_id = $1;", [id]);
   return result.rows;
 }
