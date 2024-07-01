@@ -6,6 +6,7 @@ const port = 3300;
 
 const app = express();
 
+// TODO: Wrap in env check
 const allowedOrigins = ["http://localhost:3000"];
 
 const options: cors.CorsOptions = {
@@ -15,8 +16,9 @@ const options: cors.CorsOptions = {
 app.use(express.json());
 app.use(cors(options));
 
-const BASE = "/api/v1";
-app.use(`${BASE}/todos`, todoSetup(data));
+const BASEPATH = "/api/v1";
+
+app.use(`${BASEPATH}/todos`, todoSetup(data));
 
 app.listen(port, () => {
   console.log(`ToDo API Running on port ${port}`);

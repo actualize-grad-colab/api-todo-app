@@ -12,16 +12,21 @@ type TodoRecord = { id: number; title: string; body: string; user_id: number };
 // type TodoModel = {}
 // type TodoResponse = {}
 
-export async function getTodo() {
-  const result = await query("select * from todos;", []);
-  return result;
+export async function all() {
+  const result = await query("SELECT * FROM todos;", []);
+  return result.rows;
+}
+
+export async function getById(id: number) {
+  const result = await query("SELECT * FROM todos WHERE todo_id = $1;", [id]);
+  return result.rows;
 }
 
 export async function createTodo({ title, body, user_id }: CreateTodoParams) {
   const result = await query(
-    "INSERT INTO todos (title, body, user_id) VALUES ($1, $2, $3);",
+    "INSERT INTO todos (title, body, user_id) VALUES ($1, $2, $3) RETURNING *;",
     [title, body, user_id],
   );
   // TODO: Create model instance
-  return result;
+  return result.rows;
 }
