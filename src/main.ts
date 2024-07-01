@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import * as data from "./models/data";
+import todoSetup from "./routes/todos";
 const port = 3300;
 
 const app = express();
@@ -14,11 +15,7 @@ const options: cors.CorsOptions = {
 app.use(cors(options));
 
 const BASE = "/api/v1";
-
-app.get(`${BASE}/todos`, async (req, res, next) => {
-  const result = await data.gettodo();
-  res.send({ todos: result.rows });
-});
+app.use(`${BASE}/todos`, todoSetup(data));
 
 app.listen(port, () => {
   console.log(`ToDo API Running on port ${port}`);
