@@ -2,8 +2,8 @@
   "name": "api-todo-app",
   "version": "1.0.0",
   "scripts": {
-    "not-start": "node --env-file=./config/local.env -r ts-node/register ./src/main.ts",
-    "start": "nodemon --exec 'node --env-file=./config/local.env -r ts-node/register ./src/main.ts'",
+    "start": "node --env-file=./config/local.env -r ts-node/register ./src/main.ts",
+    "watch": "nodemon --watch \"src/**\" --ext \"ts,json\"  --exec \"node --env-file=./config/local.env -r ts-node/register ./src/main.ts\"",
     "db:up": "dbmate --url=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable up",
     "db:seed": "psql -U postgres --dbname=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable -f ./db/seeds/dev.data.sql",
     "test": "echo \"Error: no test specified\" && exit 1"
