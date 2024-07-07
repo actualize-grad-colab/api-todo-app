@@ -26,8 +26,17 @@ function setup(todoData: any) {
   });
 
   router.post("/", async (req, res, next) => {
-    console.log("req.*=>", req.body);
-    const todos = await todoData.createTodo(req.body);
+    const todos = await todoData.create(req.body);
+    res.send({ todos });
+  });
+
+  router.put("/", async (req, res, next) => {
+    const todos = await todoData.update(req.body);
+    res.send({ todos });
+  });
+
+  router.delete("/:id", async (req, res, next) => {
+    const todos = await todoData.destroy(req.params.id);
     res.send({ todos });
   });
 

@@ -4,17 +4,14 @@ BEGIN;
 
 -- SET transaction READ WRITE;
 
-INSERT INTO account_profiles (username, email, pwd)
-VALUES ('johndoe', 'actualize-grad-colab-testuser@gmail.com', 'password123');
+-- INSERT INTO account_profiles (username, email, pwd)
+-- VALUES ('johndoe', 'actualize-grad-colab-testuser@gmail.com', 'password123');
 
-INSERT INTO app_users (first_name, last_name, display_name, profile_id)
+INSERT INTO app_users (first_name, last_name, display_name)
 SELECT
     'John' AS first_name,
     'Doe' AS last_name,
-    'JDoe' AS display_name,
-    profile_id
-FROM account_profiles
-WHERE username = 'johndoe';
+    'JDoe' AS display_name;
 
 INSERT INTO todos (title, body, user_id)
 SELECT

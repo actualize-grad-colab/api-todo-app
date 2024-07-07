@@ -24,7 +24,7 @@ export async function getById(id: number) {
   return result.rows;
 }
 
-export async function createTodo({ title, body, user_id }: CreateTodoParams) {
+export async function create({ title, body, user_id }: CreateTodoParams) {
   const result = await query(
     "INSERT INTO todos (title, body, user_id) VALUES ($1, $2, $3) RETURNING *;",
     [title, body, user_id],
@@ -34,7 +34,7 @@ export async function createTodo({ title, body, user_id }: CreateTodoParams) {
 }
 
 // TODO: todo needs a "complete" flag
-export async function updateTodo({ title, body, todo_id }: UpdateTodoParams) {
+export async function update({ title, body, todo_id }: UpdateTodoParams) {
   const result = await query(
     "UPDATE todos SET title = $1, body = $2 WHERE todo_id = $3;",
     [title, body, todo_id],
@@ -42,7 +42,7 @@ export async function updateTodo({ title, body, todo_id }: UpdateTodoParams) {
   return result.rows;
 }
 
-export async function deleteTodo(id: number) {
+export async function destroy(id: number) {
   const result = await query("DELETE FROM todos WHERE todo_id = $1;", [id]);
   return result.rows;
 }
