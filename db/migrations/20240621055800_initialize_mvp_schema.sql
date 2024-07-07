@@ -6,10 +6,13 @@ CREATE TABLE app_users (
     display_name VARCHAR(64) NOT NULL
 );
 
+CREATE TYPE todo_status AS ENUM ('canceled', 'pending', 'active', 'complete');
+
 CREATE TABLE todos (
     todo_id SERIAL PRIMARY KEY,
     title VARCHAR(128),
     body TEXT,
+    status TODO_STATUS DEFAULT 'pending',
     user_id INTEGER REFERENCES app_users (user_id) ON DELETE CASCADE
 );
 
@@ -30,5 +33,5 @@ CREATE TABLE todo_tags (
 DROP TABLE IF EXISTS todo_tags;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS todos;
+DROP TYPE IF EXISTS TODO_STATUS;
 DROP TABLE IF EXISTS app_users;
-DROP TABLE IF EXISTS account_profiles;

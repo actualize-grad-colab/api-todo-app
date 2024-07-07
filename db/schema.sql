@@ -10,17 +10,15 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
+-- Name: todo_status; Type: TYPE; Schema: public; Owner: -
 --
 
--- *not* creating schema, since initdb creates it
-
-
---
--- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON SCHEMA public IS '';
+CREATE TYPE public.todo_status AS ENUM (
+    'canceled',
+    'pending',
+    'active',
+    'complete'
+);
 
 
 SET default_tablespace = '';
@@ -117,6 +115,7 @@ CREATE TABLE public.todos (
     todo_id integer NOT NULL,
     title character varying(128),
     body text,
+    status public.todo_status DEFAULT 'pending'::public.todo_status,
     user_id integer
 );
 
