@@ -24,8 +24,8 @@ CREATE TABLE tags (
 );
 
 CREATE TABLE todo_tags (
-    todo_id INTEGER REFERENCES todos ON DELETE CASCADE,
-    tag_id INTEGER REFERENCES tags (tag_id) ON DELETE CASCADE,
+    todo_id INTEGER REFERENCES todos (id) ON DELETE CASCADE,
+    tag_id INTEGER REFERENCES tags (id) ON DELETE CASCADE,
     PRIMARY KEY (todo_id, tag_id)
 );
 

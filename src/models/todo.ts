@@ -21,7 +21,7 @@ interface TodoRecord {
   status: TodoStatus;
   user_id: number;
 }
-export default class TodoModel {
+export class Todo {
   static #isInternalConstructing = false;
 
   id: number;
@@ -31,10 +31,10 @@ export default class TodoModel {
   user_id: any;
 
   constructor({ todo_id, title, body, status, user_id }: TodoRecord) {
-    if (!TodoModel.#isInternalConstructing) {
-      throw new TypeError("TodoModel is not externally constructable");
+    if (!Todo.#isInternalConstructing) {
+      throw new TypeError("Todo is not externally constructable");
     }
-    TodoModel.#isInternalConstructing = false;
+    Todo.#isInternalConstructing = false;
     this.id = todo_id;
     this.title = title;
     this.body = body;

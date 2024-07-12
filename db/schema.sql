@@ -30,7 +30,7 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE public.app_users (
-    user_id integer NOT NULL,
+    id integer NOT NULL,
     first_name character varying(64) NOT NULL,
     last_name character varying(64) NOT NULL,
     display_name character varying(64) NOT NULL
@@ -38,10 +38,10 @@ CREATE TABLE public.app_users (
 
 
 --
--- Name: app_users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: app_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.app_users_user_id_seq
+CREATE SEQUENCE public.app_users_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -51,10 +51,10 @@ CREATE SEQUENCE public.app_users_user_id_seq
 
 
 --
--- Name: app_users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: app_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.app_users_user_id_seq OWNED BY public.app_users.user_id;
+ALTER SEQUENCE public.app_users_id_seq OWNED BY public.app_users.id;
 
 
 --
@@ -71,17 +71,17 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.tags (
-    tag_id integer NOT NULL,
+    id integer NOT NULL,
     label character varying(32) NOT NULL,
     user_id integer
 );
 
 
 --
--- Name: tags_tag_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tags_tag_id_seq
+CREATE SEQUENCE public.tags_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -91,10 +91,10 @@ CREATE SEQUENCE public.tags_tag_id_seq
 
 
 --
--- Name: tags_tag_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.tags_tag_id_seq OWNED BY public.tags.tag_id;
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
@@ -112,7 +112,7 @@ CREATE TABLE public.todo_tags (
 --
 
 CREATE TABLE public.todos (
-    todo_id integer NOT NULL,
+    id integer NOT NULL,
     title character varying(128),
     body text,
     status public.todo_status DEFAULT 'pending'::public.todo_status,
@@ -121,10 +121,10 @@ CREATE TABLE public.todos (
 
 
 --
--- Name: todos_todo_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: todos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.todos_todo_id_seq
+CREATE SEQUENCE public.todos_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -134,31 +134,31 @@ CREATE SEQUENCE public.todos_todo_id_seq
 
 
 --
--- Name: todos_todo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: todos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.todos_todo_id_seq OWNED BY public.todos.todo_id;
-
-
---
--- Name: app_users user_id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.app_users ALTER COLUMN user_id SET DEFAULT nextval('public.app_users_user_id_seq'::regclass);
+ALTER SEQUENCE public.todos_id_seq OWNED BY public.todos.id;
 
 
 --
--- Name: tags tag_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: app_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.tags ALTER COLUMN tag_id SET DEFAULT nextval('public.tags_tag_id_seq'::regclass);
+ALTER TABLE ONLY public.app_users ALTER COLUMN id SET DEFAULT nextval('public.app_users_id_seq'::regclass);
 
 
 --
--- Name: todos todo_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.todos ALTER COLUMN todo_id SET DEFAULT nextval('public.todos_todo_id_seq'::regclass);
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
+
+
+--
+-- Name: todos id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.todos ALTER COLUMN id SET DEFAULT nextval('public.todos_id_seq'::regclass);
 
 
 --
@@ -166,7 +166,7 @@ ALTER TABLE ONLY public.todos ALTER COLUMN todo_id SET DEFAULT nextval('public.t
 --
 
 ALTER TABLE ONLY public.app_users
-    ADD CONSTRAINT app_users_pkey PRIMARY KEY (user_id);
+    ADD CONSTRAINT app_users_pkey PRIMARY KEY (id);
 
 
 --
@@ -182,7 +182,7 @@ ALTER TABLE ONLY public.schema_migrations
 --
 
 ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_pkey PRIMARY KEY (tag_id);
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -206,7 +206,7 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todos
-    ADD CONSTRAINT todos_pkey PRIMARY KEY (todo_id);
+    ADD CONSTRAINT todos_pkey PRIMARY KEY (id);
 
 
 --
@@ -214,7 +214,7 @@ ALTER TABLE ONLY public.todos
 --
 
 ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(user_id) ON DELETE CASCADE;
+    ADD CONSTRAINT tags_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(id) ON DELETE CASCADE;
 
 
 --
@@ -222,7 +222,7 @@ ALTER TABLE ONLY public.tags
 --
 
 ALTER TABLE ONLY public.todo_tags
-    ADD CONSTRAINT todo_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(tag_id) ON DELETE CASCADE;
+    ADD CONSTRAINT todo_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(id) ON DELETE CASCADE;
 
 
 --
@@ -230,7 +230,7 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todo_tags
-    ADD CONSTRAINT todo_tags_todo_id_fkey FOREIGN KEY (todo_id) REFERENCES public.todos(todo_id) ON DELETE CASCADE;
+    ADD CONSTRAINT todo_tags_todo_id_fkey FOREIGN KEY (todo_id) REFERENCES public.todos(id) ON DELETE CASCADE;
 
 
 --
@@ -238,7 +238,7 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todos
-    ADD CONSTRAINT todos_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(user_id) ON DELETE CASCADE;
+    ADD CONSTRAINT todos_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(id) ON DELETE CASCADE;
 
 
 --

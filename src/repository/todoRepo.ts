@@ -1,2 +1,3 @@
 import { pgAdapter } from "./adapter";
-export default pgAdapter("todos");
+import { Todo } from "../models/todo";
+export default pgAdapter<Todo>("todos");

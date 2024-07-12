@@ -31,5 +31,6 @@ export interface Repository<T extends Row> {
   update(id: T["id"], data: Partial<T>): Promise<T>;
   delete(id: T["id"]): Promise<T>;
   read(id: T["id"]): Promise<T>;
+  all(): Promise<T[]>;
   find<K extends keyof T>(filters: Filter<T, K>[]): Promise<T[]>;
 }

@@ -1,42 +1,30 @@
-import express from "express";
-const router = express.Router();
+import { Router } from "express";
+import { Repository } from "../types/dbAdapter";
+import { Todo } from "../models/todo";
 
-/* Thinking this is going to look like:
- * main = setup the app
- * |
- * V
- * routes/resource = handle the http requests and responses
- * |               ^
- * V               |
- * models/entitiy = expose "ORM" like methods and return model objects
- * |               ^
- * V               |
- * data/records = accept a db connection interface and run SQL querries
- *
- */
-function setup(todoData: any) {
-  router.get("/", async (req, res, next) => {
-    const todos = await todoData.all();
+function setup(router: Router, repo: Repository<Todo>) {
+  router.get("/", async (_req, res, _next) => {
+    const todos = await repo.all();
     res.send({ todos });
   });
 
-  router.get("/:id", async (req, res, next) => {
-    const todos = await todoData.getById(req.params.id);
+  router.get("/:id", async (req, res, _next) => {
+    const todos = await repo.read(parseInt(req.params.id));
     res.send({ todos });
   });
 
-  router.post("/", async (req, res, next) => {
-    const todos = await todoData.create(req.body);
+  router.post("/", async (req, res, _next) => {
+    const todos = await repo.create(req.body);
     res.send({ todos });
   });
 
-  router.put("/", async (req, res, next) => {
-    const todos = await todoData.update(req.body);
+  router.patch("/:id", async (req, res, _next) => {
+    const todos = await repo.update(parseInt(req.params.id), req.body);
     res.send({ todos });
   });
 
-  router.delete("/:id", async (req, res, next) => {
-    const todos = await todoData.destroy(req.params.id);
+  router.delete("/:id", async (req, res, _next) => {
+    const todos = await repo.delete(parseInt(req.params.id));
     res.send({ todos });
   });
 

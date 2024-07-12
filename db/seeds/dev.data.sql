@@ -17,20 +17,20 @@ INSERT INTO todos (title, body, user_id)
 SELECT
     'Buy milk' AS title,
     'Need to buy milk from the store' AS body,
-    user_id
+    id AS user_id
 FROM app_users
 WHERE display_name = 'JDoe';
 
 INSERT INTO tags (label, user_id)
 SELECT
     'Groceries' AS label,
-    user_id
+    id AS user_id
 FROM app_users WHERE display_name = 'JDoe';
 
 INSERT INTO todo_tags (todo_id, tag_id)
 SELECT
-    todos.todo_id,
-    tags.tag_id
+    todos.id AS todo_id,
+    tags.id AS tag_id
 FROM todos
 CROSS JOIN tags
 WHERE
