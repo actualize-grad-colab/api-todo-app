@@ -1,10 +1,5 @@
-// NOTE: For associations, take one of two routes
-// A) Eager load any associations
-// B) Lazy load associations accessing them through methods
-// B.2) I suppose you could hide the lazy loading behind a custom getter
-// B.3) Yeah, then the implementation details are hidden besides needing to
-// await `model.asocciatedModel` Is that even a thing? Maybe just K.I.S.S.
-
+// TODO:
+// Too fancy!!! Strip this down, son!
 enum TodoStatus {
   canceled = "canceled",
   pending = "pending",
@@ -12,12 +7,12 @@ enum TodoStatus {
   complete = "copmplete",
 }
 
-interface TodoCreationParams {
-  title: string;
-  body: string;
-  status?: TodoStatus;
-  user_id: number;
-}
+// interface TodoCreationParams {
+//   title: string;
+//   body: string;
+//   status?: TodoStatus;
+//   user_id: number;
+// }
 
 interface TodoRecord {
   todo_id: number;
@@ -46,8 +41,6 @@ export default class TodoModel {
     this.status = status;
     this.user_id = user_id;
   }
-
-  create({ title, body, status, user_id });
-
-  async tags() {}
 }
+// type CreateTodoParams = { title: string; body: string; user_id: number };
+// type UpdateTodoParams = { title: string; body: string; todo_id: number };

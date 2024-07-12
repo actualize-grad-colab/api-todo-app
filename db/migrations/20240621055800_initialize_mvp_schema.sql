@@ -1,6 +1,6 @@
 -- migrate:up
 CREATE TABLE app_users (
-    user_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     first_name VARCHAR(64) NOT NULL,
     last_name VARCHAR(64) NOT NULL,
     display_name VARCHAR(64) NOT NULL
@@ -9,17 +9,17 @@ CREATE TABLE app_users (
 CREATE TYPE todo_status AS ENUM ('canceled', 'pending', 'active', 'complete');
 
 CREATE TABLE todos (
-    todo_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     title VARCHAR(128),
     body TEXT,
     status TODO_STATUS DEFAULT 'pending',
-    user_id INTEGER REFERENCES app_users (user_id) ON DELETE CASCADE
+    user_id INTEGER REFERENCES app_users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (
-    tag_id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     label VARCHAR(32) NOT NULL,
-    user_id INTEGER REFERENCES app_users (user_id) ON DELETE CASCADE,
+    user_id INTEGER REFERENCES app_users (id) ON DELETE CASCADE,
     UNIQUE (user_id, label)
 );
 
