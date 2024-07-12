@@ -1,8 +1,3 @@
-// INFO: This file should be moved from src/models/data.ts to src/data/totdos.ts
-// Then have a file src/models/todo.ts which takes this module as a dependency
-// If done correctly, this will allow us to test each layer (route, model,
-// db-querries) to be tested independently. Oh, which reminds me...
-// TODO: Setup unit tests
 import { query } from "./connection";
 
 /*
