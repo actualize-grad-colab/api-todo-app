@@ -24,11 +24,9 @@ export async function create({ title, body, user_id }: CreateTodoParams) {
     "INSERT INTO todos (title, body, user_id) VALUES ($1, $2, $3) RETURNING *;",
     [title, body, user_id],
   );
-  // TODO: Create model instance
   return result.rows;
 }
 
-// TODO: todo needs a "complete" flag
 export async function update({ title, body, todo_id }: UpdateTodoParams) {
   const result = await query(
     "UPDATE todos SET title = $1, body = $2 WHERE todo_id = $3;",
