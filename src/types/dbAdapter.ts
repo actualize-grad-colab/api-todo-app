@@ -1,21 +1,11 @@
-// TODO: Simplify
 export const Ops = {
   eq: "=",
-  gt: ">",
-  gte: ">=",
-  lt: "<",
-  lte: "<=",
-  neq: "!=",
-  ngt: "!>",
-  ngte: "!>=",
-  nlt: "!<",
-  nlte: "!<=",
 } as const;
 
 export type Operator = (typeof Ops)[keyof typeof Ops];
 
-export interface Row extends Record<string, any> {
-  id: number | string;
+export interface Row {
+  id: number;
 }
 
 export type Filter<T extends Row, K extends keyof T> = {

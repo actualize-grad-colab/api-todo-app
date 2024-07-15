@@ -10,16 +10,16 @@ CREATE TYPE todo_status AS ENUM ('canceled', 'pending', 'active', 'complete');
 
 CREATE TABLE todos (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(128),
+    title VARCHAR(128) NOT NULL,
     body TEXT,
-    status TODO_STATUS DEFAULT 'pending',
-    user_id INTEGER REFERENCES app_users (id) ON DELETE CASCADE
+    status TODO_STATUS NOT NULL DEFAULT 'pending',
+    user_id INTEGER NOT NULL REFERENCES app_users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (
     id SERIAL PRIMARY KEY,
     label VARCHAR(32) NOT NULL,
-    user_id INTEGER REFERENCES app_users (id) ON DELETE CASCADE,
+    user_id INTEGER NOT NULL REFERENCES app_users (id) ON DELETE CASCADE,
     UNIQUE (user_id, label)
 );
 
@@ -28,6 +28,8 @@ CREATE TABLE todo_tags (
     tag_id INTEGER REFERENCES tags (id) ON DELETE CASCADE,
     PRIMARY KEY (todo_id, tag_id)
 );
+
+CREATE INDEX ON todos (user_id);
 
 -- migrate:down
 DROP TABLE IF EXISTS todo_tags;

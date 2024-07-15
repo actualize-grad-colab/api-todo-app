@@ -1,18 +1,11 @@
-// TODO:
-// Too fancy!!! Strip this down, son!
-enum TodoStatus {
-  canceled = "canceled",
-  pending = "pending",
-  active = "active",
-  complete = "copmplete",
-}
+const TodoStatusValues = {
+  canceled: "canceled",
+  pending: "pending",
+  active: "active",
+  complete: "copmplete",
+} as const;
 
-// interface TodoCreationParams {
-//   title: string;
-//   body: string;
-//   status?: TodoStatus;
-//   user_id: number;
-// }
+type TodoStatus = (typeof TodoStatusValues)[keyof typeof TodoStatusValues];
 
 interface TodoRecord {
   todo_id: number;
@@ -28,7 +21,7 @@ export class Todo {
   title: string;
   body: string;
   status: TodoStatus;
-  user_id: any;
+  user_id: number;
 
   constructor({ todo_id, title, body, status, user_id }: TodoRecord) {
     if (!Todo.#isInternalConstructing) {
@@ -41,6 +34,4 @@ export class Todo {
     this.status = status;
     this.user_id = user_id;
   }
-}
-// type CreateTodoParams = { title: string; body: string; user_id: number };
-// type UpdateTodoParams = { title: string; body: string; todo_id: number };
+} 
