@@ -21,7 +21,7 @@ export function pgAdapter<T extends Row>(tableName: string): Repository<T> {
         Object.values(data),
       );
 
-      console.log(fmt);
+      console.log("Create fmt:\n", fmt);
       const result = await pool.query(fmt);
       return result.rows[0] as T;
     },

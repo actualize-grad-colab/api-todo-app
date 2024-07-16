@@ -17,15 +17,13 @@ const options: cors.CorsOptions = {
   origin: allowedOrigins,
 };
 
-const router = express.Router();
-
 app.use(express.json());
 app.use(cors(options));
 
 const BASEPATH = "/api/v1";
 
-app.use(`${BASEPATH}/todos`, todoSetup(router, todoRepo));
-app.use(`${BASEPATH}/tags`, tagSetup(router, tagRepo));
+app.use(`${BASEPATH}/todos`, todoSetup(todoRepo));
+app.use(`${BASEPATH}/tags`, tagSetup(tagRepo));
 // TODO: Add more routes here
 
 app.listen(port, () => {

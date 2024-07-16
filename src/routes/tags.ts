@@ -2,7 +2,9 @@ import { Router } from "express";
 import { Repository } from "../types/dbAdapter";
 import { Tag } from "../models/tag";
 
-function setup(router: Router, repo: Repository<Tag>): Router {
+function setup(repo: Repository<Tag>): Router {
+  const router = Router();
+
   router.get("/", async (_req, res) => {
     const tags = await repo.all();
     res.send({ tags });
@@ -14,7 +16,8 @@ function setup(router: Router, repo: Repository<Tag>): Router {
   });
 
   router.post("/", async (req, res) => {
-    const tags = await repo.create(req.body);
+    // FIXME:  Hardcoded user_id
+    const tags = await repo.create({ ...req.body, user_id: 1 });
     res.send({ tags });
   });
 

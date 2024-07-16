@@ -2,7 +2,9 @@ import { Router } from "express";
 import { Repository } from "../types/dbAdapter";
 import { Todo } from "../models/todo";
 
-function setup(router: Router, repo: Repository<Todo>): Router {
+function setup(repo: Repository<Todo>): Router {
+  const router = Router();
+
   router.get("/", async (_req, res) => {
     const todos = await repo.all();
     res.send({ todos });
@@ -14,7 +16,8 @@ function setup(router: Router, repo: Repository<Todo>): Router {
   });
 
   router.post("/", async (req, res) => {
-    const todos = await repo.create(req.body);
+    // FIXME:  Hardcoded user_id
+    const todos = await repo.create({ ...req.body, user_id: 1 });
     res.send({ todos });
   });
 
