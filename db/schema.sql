@@ -10,6 +10,20 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
+--
 -- Name: todo_status; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -73,7 +87,7 @@ CREATE TABLE public.schema_migrations (
 CREATE TABLE public.tags (
     id integer NOT NULL,
     label character varying(32) NOT NULL,
-    user_id integer
+    user_id integer NOT NULL
 );
 
 
@@ -113,10 +127,10 @@ CREATE TABLE public.todo_tags (
 
 CREATE TABLE public.todos (
     id integer NOT NULL,
-    title character varying(128),
+    title character varying(128) NOT NULL,
     body text,
-    status public.todo_status DEFAULT 'pending'::public.todo_status,
-    user_id integer
+    status public.todo_status DEFAULT 'pending'::public.todo_status NOT NULL,
+    user_id integer NOT NULL
 );
 
 
@@ -207,6 +221,13 @@ ALTER TABLE ONLY public.todo_tags
 
 ALTER TABLE ONLY public.todos
     ADD CONSTRAINT todos_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: todos_user_id_idx; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX todos_user_id_idx ON public.todos USING btree (user_id);
 
 
 --

@@ -8,7 +8,7 @@ POST http://localhost:3300/api/v1/todos
   "body": "API test"
 }
 
-GET http://localhost:3300/api/v1/tags
+GET http://localhost:3300/api/v1/todos
 HTTP 200
 
 
