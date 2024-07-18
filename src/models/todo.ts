@@ -19,7 +19,7 @@ export class Todo {
 
   id: number;
   title: string;
-  body: string;
+  body?: string;
   status: TodoStatus;
   user_id: number;
 
@@ -34,4 +34,4 @@ export class Todo {
     this.status = status;
     this.user_id = user_id;
   }
-} 
+}

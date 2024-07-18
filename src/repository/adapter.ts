@@ -1,18 +1,21 @@
-import { Pool } from "pg";
+import pg from "pg";
 import { format } from "node-pg-format";
 import { Filter, Ops, Repository, Row } from "../types/dbAdapter";
 
+export type QueryFunction = (
+  text: string,
+  params?: unknown[],
+) => Promise<pg.QueryResult>;
+
 export default class PgAdapter<T extends Row> implements Repository<T> {
-  protected readonly pool: Pool;
+  protected readonly query: QueryFunction;
   protected readonly tableName: string;
 
-  constructor(pool: Pool, tableName: string) {
-    this.pool = pool;
+  constructor(query: QueryFunction, tableName: string) {
+    this.query = query;
     this.tableName = tableName;
-    pool.on("error", (err) => {
-      console.error("Unexpected error on idle client", err);
-      process.exit(-1);
-    });
+    // TODO: Move pool setup to main
+    // TODO: Install and use andywer/squid
   }
 
   name = () => this.tableName;
@@ -26,12 +29,12 @@ export default class PgAdapter<T extends Row> implements Repository<T> {
     );
 
     console.log("Create fmt:\n", fmt);
-    const result = await this.pool.query(fmt);
+    const result = await this.query(fmt);
     return result.rows[0] as T;
   };
 
   read = async (id: T["id"]): Promise<T> => {
-    const result = await this.pool.query(
+    const result = await this.query(
       `SELECT * FROM ${this.tableName} WHERE id = $1`,
       [id],
     );
@@ -40,21 +43,22 @@ export default class PgAdapter<T extends Row> implements Repository<T> {
 
   update = async (id: T["id"], data: Partial<T>): Promise<T> => {
     const keys = Object.keys(data);
-    const result = await this.pool.query(
-      `UPDATE ${this.tableName} SET ${keys
-        .map((k, idx) => `${k} = $${idx + 2}`)
-        .join(", ")}
-          WHERE id = $1 RETURNING *`,
-      [id, ...Object.values(data)],
-    );
+    const queryText = `UPDATE ${this.tableName} SET ${keys
+      .map((k, idx) => `${k} = $${(idx + 2).toString()}`)
+      .join(", ")}
+          WHERE id = $1 RETURNING *`;
+    console.log("Update queryText:\n", queryText);
+    const result = await this.query(queryText, [
+      id,
+      [...(Object.values(data) as unknown[])],
+    ]);
     return result.rows[0] as T;
   };
 
   delete = async (id: T["id"]): Promise<T> => {
-    const result = await this.pool.query(
-      `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`,
-      [id],
-    );
+    const queryText = `DELETE FROM ${this.tableName} WHERE id = $1 RETURNING *`;
+    console.log("Delete queryText:\n", queryText);
+    const result = await this.query(queryText, [id]);
     return result.rows[0] as T;
   };
 
@@ -71,12 +75,12 @@ export default class PgAdapter<T extends Row> implements Repository<T> {
       .join(" AND ");
     const query = `SELECT * FROM ${this.tableName} ${where ? `WHERE ${where}` : ""}`;
     const values = filters.flatMap((filter) => [filter.field, filter.value]);
-    const result = await this.pool.query(format(query, ...values));
+    const result = await this.query(format(query, ...values));
     return result.rows as T[];
   };
 
   all = async (): Promise<T[]> => {
-    const result = await this.pool.query(`SELECT * FROM ${this.tableName}`);
+    const result = await this.query(`SELECT * FROM ${this.tableName}`);
     return result.rows as T[];
   };
 }

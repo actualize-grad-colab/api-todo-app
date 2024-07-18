@@ -1,8 +1,7 @@
-import { Pool } from "pg";
-import PgAdapter from "./adapter";
+import PgAdapter, { QueryFunction } from "./adapter";
 import { Tag } from "../models/tag";
 export default class TagRepository extends PgAdapter<Tag> {
-  constructor(pool: Pool) {
-    super(pool, "tags");
+  constructor(query: QueryFunction) {
+    super(query, "tags");
   }
 }
