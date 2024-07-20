@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
-import { Repository } from "../types/dbAdapter";
-import { Todo } from "../models/todo";
-import { AtLeast } from "../types/util";
+import { Repository } from "../repository/iRepository";
+import { TodosTable } from "../models/todo";
+import { NewTableRow, TableRow } from "squid";
 
-function setup(repo: Repository<Todo>): Router {
+function setup(repo: Repository<TodosTable>): Router {
   const router = Router();
 
   router.get("/", (_req: Request, res: Response): void => {
@@ -23,7 +23,7 @@ function setup(repo: Repository<Todo>): Router {
   router.post("/", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
       // FIXME:  Hardcoded user_id
-      const body = req.body as AtLeast<Todo, "title" | "status">;
+      const body = req.body as NewTableRow<TodosTable>;
       const todos = await repo.create({ ...body, user_id: 1 });
       res.status(201).send({ todos });
     })();
@@ -31,7 +31,7 @@ function setup(repo: Repository<Todo>): Router {
 
   router.patch("/:id", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
-      const body = req.body as Partial<Todo>;
+      const body = req.body as Partial<TableRow<TodosTable>>;
       const todos = await repo.update(parseInt(req.params.id), body);
       res.send({ todos });
     })();
@@ -39,7 +39,7 @@ function setup(repo: Repository<Todo>): Router {
 
   router.delete("/:id", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
-      const todos = await repo.delete(parseInt(req.params.id));
+      const todos = await repo.remove(parseInt(req.params.id));
       res.status(204).send({ todos });
     })();
   });

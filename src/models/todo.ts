@@ -1,37 +1,16 @@
-const TodoStatusValues = {
-  canceled: "canceled",
-  pending: "pending",
-  active: "active",
-  complete: "copmplete",
-} as const;
+import { defineTable, Schema, NewTableRow, TableRow } from "squid";
 
-type TodoStatus = (typeof TodoStatusValues)[keyof typeof TodoStatusValues];
+export type NewTodoRecord = NewTableRow<TodosTable>;
+export type TodoRecord = TableRow<TodosTable>;
 
-interface TodoRecord {
-  todo_id: number;
-  title: string;
-  body: string;
-  status: TodoStatus;
-  user_id: number;
-}
-export class Todo {
-  static #isInternalConstructing = false;
+const TodoStatusValues = ["canceled", "pending", "active", "copmplete"];
 
-  id: number;
-  title: string;
-  body?: string;
-  status: TodoStatus;
-  user_id: number;
+const table = defineTable("todos", {
+  id: Schema.Number,
+  title: Schema.String,
+  body: Schema.nullable(Schema.Number),
+  status: Schema.Enum(TodoStatusValues),
+  user_id: Schema.Number,
+});
 
-  constructor({ todo_id, title, body, status, user_id }: TodoRecord) {
-    if (!Todo.#isInternalConstructing) {
-      throw new TypeError("Todo is not externally constructable");
-    }
-    Todo.#isInternalConstructing = false;
-    this.id = todo_id;
-    this.title = title;
-    this.body = body;
-    this.status = status;
-    this.user_id = user_id;
-  }
-}
+export type TodosTable = typeof table;

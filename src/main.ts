@@ -4,10 +4,11 @@ import pg from "pg";
 import createError from "http-errors";
 import errorHandler from "error-handler-json";
 
-import TodoRepo from "./repository/todoRepo";
-import TagRepo from "./repository/tagRepo";
+import { todoRepository } from "./repository/todoRepository";
+import { tagRepository } from "./repository/tagRepository";
 import setupTodosController from "./routes/todos";
 import setupTagsController from "./routes/tags";
+import { QueryConfig } from "squid/pg";
 const port = "3300";
 const app = express();
 const allowedOrigins: string[] = [];
@@ -32,17 +33,18 @@ const BASEPATH = "/api/v1";
 const { Pool } = pg;
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 
-function query(text: string, params?: unknown[]): Promise<pg.QueryResult> {
-  pool.on("error", (err) => {
-    console.error("Unexpected error on idle client", err);
-    process.exit(-1);
-  });
+pool.on("error", (err) => {
+  console.error("Unexpected error on idle client", err);
+  process.exit(-1);
+});
 
-  return pool.query(text, params);
-}
+const query = async (config: QueryConfig): Promise<pg.QueryResult> => {
+  if (isDevEnvironment) console.log("Query:", JSON.stringify(config, null, 2));
+  return await pool.query(config);
+};
 
-app.use(`${BASEPATH}/todos`, setupTodosController(new TodoRepo(query)));
-app.use(`${BASEPATH}/tags`, setupTagsController(new TagRepo(query)));
+app.use(`${BASEPATH}/todos`, setupTodosController(todoRepository(query)));
+app.use(`${BASEPATH}/tags`, setupTagsController(tagRepository(query)));
 
 // catch 404 and forward to error handler
 // Serves as the last "route option"
@@ -55,6 +57,3 @@ app.use(errorHandler({ includeStack: isDevEnvironment }));
 app.listen(port, () => {
   console.log(`ToDo API Running on port ${port}`);
 });
-
-// TODO: Fix hard-coded user_ids
-// TODO: Unify response object structure

@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
-import { Repository } from "../types/dbAdapter";
-import { Tag } from "../models/tag";
-import { AtLeast } from "../types/util";
+import { Repository } from "../repository/iRepository";
+import { TagsTable } from "../models/tag";
+import { TableRow, NewTableRow } from "squid";
 
-function setup(repo: Repository<Tag>): Router {
+function setup(repo: Repository<TagsTable>): Router {
   const router = Router();
 
   router.get("/", (_req: Request, res: Response): void => {
@@ -22,7 +22,7 @@ function setup(repo: Repository<Tag>): Router {
 
   router.post("/", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
-      const body = req.body as AtLeast<Tag, "label">;
+      const body = req.body as NewTableRow<TagsTable>;
       // FIXME:  Hardcoded user_id
       const tags = await repo.create({ ...body, user_id: 1 });
       res.status(201).send({ tags });
@@ -31,7 +31,7 @@ function setup(repo: Repository<Tag>): Router {
 
   router.patch("/:id", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
-      const body = req.body as Partial<Tag>;
+      const body = req.body as Partial<TableRow<TagsTable>>;
       const tags = await repo.update(parseInt(req.params.id), body);
       res.send({ tags });
     })();
@@ -39,7 +39,7 @@ function setup(repo: Repository<Tag>): Router {
 
   router.delete("/:id", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
-      const tags = await repo.delete(parseInt(req.params.id));
+      const tags = await repo.remove(parseInt(req.params.id));
       res.status(204).send({ tags });
     })();
   });
