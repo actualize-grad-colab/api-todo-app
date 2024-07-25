@@ -1,6 +1,6 @@
-// @ts-check
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import jest from "eslint-plugin-jest";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -9,6 +9,7 @@ export default tseslint.config(
   ...tseslint.configs.stylisticTypeChecked,
   ...tseslint.configs.strictTypeChecked,
   {
+    files: ["src/**/*.ts"],
     languageOptions: {
       parserOptions: {
         project: true,
@@ -21,7 +22,8 @@ export default tseslint.config(
   },
   {
     // disable type-aware linting on JS files like this one
-    files: ["**/*.js"],
+    files: ["test/**/*.js"],
+    ...jest.configs["flat/all"],
     extends: [tseslint.configs.disableTypeChecked],
     rules: {
       // turn off other type-aware rules
