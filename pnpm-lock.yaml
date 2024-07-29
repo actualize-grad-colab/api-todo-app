@@ -32,6 +32,9 @@ importers:
       sql-template-tag:
         specifier: ^5.2.1
         version: 5.2.1
+      squid:
+        specifier: ^0.5.2
+        version: 0.5.2
     devDependencies:
       '@babel/core':
         specifier: ^7.24.9
@@ -1117,6 +1120,9 @@ packages:
 
   '@types/node@20.14.13':
     resolution: {integrity: sha512-+bHoGiZb8UiQ0+WEtmph2IWQCjIqg8MDZMAV+ppRRhUZnquF5mQkP/9vpSwJClEiSM/C7fZZExPzfU0vJTyp8w==}
+
+  '@types/pg@7.14.11':
+    resolution: {integrity: sha512-EnZkZ1OMw9DvNfQkn2MTJrwKmhJYDEs5ujWrPfvseWNoI95N8B4HzU/Ltrq5ZfYxDX/Zg8mTzwr6UAyTjjFvXA==}
 
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
@@ -2683,6 +2689,9 @@ packages:
     resolution: {integrity: sha512-lFdvXCOqWhV40A7w4oQVDyuaNFb5yO+dhsHStZzOdtDJWCBWYv4+hhATK5nPpY5v/T1OMVcLMPeN4519qIyb9Q==}
     engines: {node: '>=14'}
 
+  squid@0.5.2:
+    resolution: {integrity: sha512-cw0jVGdNMAdC+7YpISD7qSFJTWSdnkuPHnBZ8v0hgIOef2OoB2l7lWZCiHOhI+ZzWgJ0bvwsjjSX81iMtCTOAQ==}
+
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==}
     engines: {node: '>=10'}
@@ -4211,6 +4220,12 @@ snapshots:
   '@types/node@20.14.13':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/pg@7.14.11':
+    dependencies:
+      '@types/node': 20.14.13
+      pg-protocol: 1.6.1
+      pg-types: 2.2.0
 
   '@types/pg@8.11.6':
     dependencies:
@@ -6027,6 +6042,13 @@ snapshots:
       nearley: 2.20.1
 
   sql-template-tag@5.2.1: {}
+
+  squid@0.5.2:
+    dependencies:
+      '@types/pg': 7.14.11
+      debug: 4.3.6
+    transitivePeerDependencies:
+      - supports-color
 
   stack-utils@2.0.6:
     dependencies:
