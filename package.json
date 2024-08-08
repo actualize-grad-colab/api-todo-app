@@ -1,35 +1,56 @@
 {
   "name": "api-todo-app",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "start": "node --env-file=./config/local.env -r ts-node/register ./src/main.ts",
+    "start": "tsx watch --env-file=config/local.env --clear-screen=false --tsconfig=tsconfig.json src/main.ts",
+    "start:nowatch": "tsx --env-file=config/local.env --tsconfig=tsconfig.json src/main.ts # Seems unlikely anyone will want this so just making watch the default",
+    "start:trace": "tsx watch --trace-warnings --env-file=config/local.env --clear-screen=false --tsconfig=tsconfig.json src/main.ts",
     "db:up": "dbmate --url=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable up",
     "db:seed": "psql -U postgres --dbname=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable -f ./db/seeds/dev.data.sql",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "db:drop": "psql -U postgres --dbname=postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable -f ./db/util/drop_tables.sql",
+    "build:all": "",
+    "build:make": "tsc",
+    "build:lint": "eslint --ext .ts,.tsx src",
+    "build:clean": "rm -rf build",
+    "test": "jest --detectOpenHandles --forceExit"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@pgtyped/runtime": "^2.3.0",
     "@types/pg": "^8.11.6",
     "cors": "^2.8.5",
+    "error-handler-json": "^2.1.0",
     "express": "^4.19.2",
+    "http-errors": "^2.0.0",
     "pg": "^8.12.0",
-    "save": "^2.9.0"
+    "sql-template-tag": "^5.2.1",
+    "squid": "^0.5.2"
   },
   "devDependencies": {
-    "@eslint/js": "^9.4.0",
+    "@babel/core": "^7.24.9",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/preset-typescript": "^7.24.7",
+    "@eslint/js": "^9.8.0",
+    "@pgtyped/cli": "^2.3.0",
     "@types/cors": "^2.8.17",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.13.0",
-    "dbmate": "^2.17.0",
+    "@types/http-errors": "^2.0.4",
+    "@types/node": "^20.14.12",
+    "babel-jest": "^29.7.0",
+    "dbmate": "^2.19.0",
     "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.3.2",
-    "prettier-plugin-sql": "^0.18.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5",
-    "typescript-eslint": "^7.11.0"
-  }
+    "eslint-plugin-jest": "^28.6.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.3",
+    "prettier-plugin-sql": "^0.18.1",
+    "supertest": "^7.0.0",
+    "tsx": "^4.16.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^7.17.0"
+  },
+  "packageManager": "pnpm@8.6.2+sha512.0e68307be4f7e17afa5186932d74a984f4bba24e21d843e46874041fa8fb512a00936d42cee780743d6740b9162700e766426e721a342db2a7b49fbd079c6551"
 }

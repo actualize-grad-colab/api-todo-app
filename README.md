@@ -2,6 +2,24 @@
 
 ## Development
 
+### Setup
+
+Ran into some issues relating to npm and suggest using pnpm instead. Chances are
+if you don't know the difference, you'll never notice.
+
+```shell
+  npx pnpm i{nstall}
+```
+
+If you really wan't to pretend nothing's changed, you can run the following
+command to alias `npm` to `pnpm` in your shell. This will likely cause you a
+headache in 9 months when you completely forget about you npm not being the
+real npm.
+
+```shell
+  echo 'alias npm=\'npx pnpm\'' >> ~/.zshrc && source ~/.zshrc
+```
+
 ### Prettier
 
 Formatter
@@ -64,15 +82,13 @@ postgres image](https://hub.docker.com/_/postgres).
 ```shell
   docker pull postgres
 
-  docker run -d --name todo_app -p 5432:5432 \
-    -e POSTGRES_PASSWORD=badpassword postgres
+  docker run -d --name todo_app -p 5432:5432 -e POSTGRES_PASSWORD=badpassword postgres
 
-  npm i
+  npx pnpm i
 
   # Connect to the database and run up migrations
 
-  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable"\
-    npx dbmate up
+  DATABASE_URL="postgres://postgres:badpassword@localhost:5432/todo_app?sslmode=disable" npx dbmate up
 ```
 
 It is convenient to use a GUI database client like

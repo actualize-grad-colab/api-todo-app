@@ -9,60 +9,53 @@ SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
-SET default_tablespace = '';
-
-SET default_table_access_method = heap;
-
 --
--- Name: account_profiles; Type: TABLE; Schema: public; Owner: -
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
 --
 
-CREATE TABLE public.account_profiles (
-    profile_id integer NOT NULL,
-    username character varying(32),
-    email character varying(64) NOT NULL,
-    pwd text NOT NULL
+-- *not* creating schema, since initdb creates it
+
+
+--
+-- Name: SCHEMA public; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON SCHEMA public IS '';
+
+
+--
+-- Name: todo_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.todo_status AS ENUM (
+    'canceled',
+    'pending',
+    'active',
+    'complete'
 );
 
 
---
--- Name: account_profiles_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
+SET default_tablespace = '';
 
-CREATE SEQUENCE public.account_profiles_profile_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: account_profiles_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.account_profiles_profile_id_seq OWNED BY public.account_profiles.profile_id;
-
+SET default_table_access_method = heap;
 
 --
 -- Name: app_users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.app_users (
-    user_id integer NOT NULL,
+    id integer NOT NULL,
     first_name character varying(64) NOT NULL,
     last_name character varying(64) NOT NULL,
-    display_name character varying(64) NOT NULL,
-    profile_id integer NOT NULL
+    display_name character varying(64) NOT NULL
 );
 
 
 --
--- Name: app_users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: app_users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.app_users_user_id_seq
+CREATE SEQUENCE public.app_users_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -72,10 +65,10 @@ CREATE SEQUENCE public.app_users_user_id_seq
 
 
 --
--- Name: app_users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: app_users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.app_users_user_id_seq OWNED BY public.app_users.user_id;
+ALTER SEQUENCE public.app_users_id_seq OWNED BY public.app_users.id;
 
 
 --
@@ -92,17 +85,17 @@ CREATE TABLE public.schema_migrations (
 --
 
 CREATE TABLE public.tags (
-    tag_id integer NOT NULL,
+    id integer NOT NULL,
     label character varying(32) NOT NULL,
     user_id integer NOT NULL
 );
 
 
 --
--- Name: tags_tag_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: tags_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.tags_tag_id_seq
+CREATE SEQUENCE public.tags_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -112,10 +105,10 @@ CREATE SEQUENCE public.tags_tag_id_seq
 
 
 --
--- Name: tags_tag_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: tags_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.tags_tag_id_seq OWNED BY public.tags.tag_id;
+ALTER SEQUENCE public.tags_id_seq OWNED BY public.tags.id;
 
 
 --
@@ -133,18 +126,19 @@ CREATE TABLE public.todo_tags (
 --
 
 CREATE TABLE public.todos (
-    todo_id integer NOT NULL,
-    title character varying(128),
+    id integer NOT NULL,
+    title character varying(128) NOT NULL,
     body text,
-    user_id integer
+    status public.todo_status DEFAULT 'pending'::public.todo_status NOT NULL,
+    user_id integer NOT NULL
 );
 
 
 --
--- Name: todos_todo_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+-- Name: todos_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE public.todos_todo_id_seq
+CREATE SEQUENCE public.todos_id_seq
     AS integer
     START WITH 1
     INCREMENT BY 1
@@ -154,54 +148,31 @@ CREATE SEQUENCE public.todos_todo_id_seq
 
 
 --
--- Name: todos_todo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+-- Name: todos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE public.todos_todo_id_seq OWNED BY public.todos.todo_id;
-
-
---
--- Name: account_profiles profile_id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.account_profiles ALTER COLUMN profile_id SET DEFAULT nextval('public.account_profiles_profile_id_seq'::regclass);
+ALTER SEQUENCE public.todos_id_seq OWNED BY public.todos.id;
 
 
 --
--- Name: app_users user_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: app_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.app_users ALTER COLUMN user_id SET DEFAULT nextval('public.app_users_user_id_seq'::regclass);
-
-
---
--- Name: tags tag_id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.tags ALTER COLUMN tag_id SET DEFAULT nextval('public.tags_tag_id_seq'::regclass);
+ALTER TABLE ONLY public.app_users ALTER COLUMN id SET DEFAULT nextval('public.app_users_id_seq'::regclass);
 
 
 --
--- Name: todos todo_id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.todos ALTER COLUMN todo_id SET DEFAULT nextval('public.todos_todo_id_seq'::regclass);
-
-
---
--- Name: account_profiles account_profiles_email_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.account_profiles
-    ADD CONSTRAINT account_profiles_email_key UNIQUE (email);
+ALTER TABLE ONLY public.tags ALTER COLUMN id SET DEFAULT nextval('public.tags_id_seq'::regclass);
 
 
 --
--- Name: account_profiles account_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: todos id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.account_profiles
-    ADD CONSTRAINT account_profiles_pkey PRIMARY KEY (profile_id);
+ALTER TABLE ONLY public.todos ALTER COLUMN id SET DEFAULT nextval('public.todos_id_seq'::regclass);
 
 
 --
@@ -209,7 +180,7 @@ ALTER TABLE ONLY public.account_profiles
 --
 
 ALTER TABLE ONLY public.app_users
-    ADD CONSTRAINT app_users_pkey PRIMARY KEY (user_id);
+    ADD CONSTRAINT app_users_pkey PRIMARY KEY (id);
 
 
 --
@@ -225,7 +196,7 @@ ALTER TABLE ONLY public.schema_migrations
 --
 
 ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_pkey PRIMARY KEY (tag_id);
+    ADD CONSTRAINT tags_pkey PRIMARY KEY (id);
 
 
 --
@@ -249,15 +220,14 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todos
-    ADD CONSTRAINT todos_pkey PRIMARY KEY (todo_id);
+    ADD CONSTRAINT todos_pkey PRIMARY KEY (id);
 
 
 --
--- Name: app_users app_users_profile_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: todos_user_id_idx; Type: INDEX; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.app_users
-    ADD CONSTRAINT app_users_profile_id_fkey FOREIGN KEY (profile_id) REFERENCES public.account_profiles(profile_id);
+CREATE INDEX todos_user_id_idx ON public.todos USING btree (user_id);
 
 
 --
@@ -265,7 +235,7 @@ ALTER TABLE ONLY public.app_users
 --
 
 ALTER TABLE ONLY public.tags
-    ADD CONSTRAINT tags_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(user_id);
+    ADD CONSTRAINT tags_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(id) ON DELETE CASCADE;
 
 
 --
@@ -273,7 +243,7 @@ ALTER TABLE ONLY public.tags
 --
 
 ALTER TABLE ONLY public.todo_tags
-    ADD CONSTRAINT todo_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(tag_id);
+    ADD CONSTRAINT todo_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(id) ON DELETE CASCADE;
 
 
 --
@@ -281,7 +251,7 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todo_tags
-    ADD CONSTRAINT todo_tags_todo_id_fkey FOREIGN KEY (todo_id) REFERENCES public.todos(todo_id);
+    ADD CONSTRAINT todo_tags_todo_id_fkey FOREIGN KEY (todo_id) REFERENCES public.todos(id) ON DELETE CASCADE;
 
 
 --
@@ -289,7 +259,7 @@ ALTER TABLE ONLY public.todo_tags
 --
 
 ALTER TABLE ONLY public.todos
-    ADD CONSTRAINT todos_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(user_id);
+    ADD CONSTRAINT todos_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.app_users(id) ON DELETE CASCADE;
 
 
 --
