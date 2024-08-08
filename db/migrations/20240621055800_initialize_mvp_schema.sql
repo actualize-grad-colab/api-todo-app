@@ -10,15 +10,17 @@ CREATE TYPE todo_status AS ENUM ('canceled', 'pending', 'active', 'complete');
 
 CREATE TABLE todos (
     id SERIAL PRIMARY KEY,
-    title VARCHAR(128) NOT NULL,
-    body TEXT,
+    title VARCHAR(128) CONSTRAINT not_empty_title CHECK (
+        char_length(title) > 0
+    ),
+    body TEXT NOT NULL DEFAULT '',
     status TODO_STATUS NOT NULL DEFAULT 'pending',
     user_id INTEGER NOT NULL REFERENCES app_users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE tags (
     id SERIAL PRIMARY KEY,
-    label VARCHAR(32) NOT NULL,
+    label VARCHAR(32) CONSTRAINT not_empty_label CHECK (char_length(label) > 0),
     user_id INTEGER NOT NULL REFERENCES app_users (id) ON DELETE CASCADE,
     UNIQUE (user_id, label)
 );

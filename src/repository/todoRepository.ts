@@ -4,8 +4,16 @@ import { sql } from "squid/pg";
 import { NewTableRow, TableRow } from "squid";
 import { spreadInsert, spreadUpdate } from "squid/pg";
 
-export function todoRepository(query: QueryFunction): Repository<TodosTable> {
-  const read = async (id: TodoRecord["id"]) => {
+interface TodoRepository extends Repository<TodosTable> {
+  setTags: (todoId: number, tagIds: number[]) => Promise<ID>;
+}
+
+interface TodoRecordWithTags extends TodoRecord {
+  tags: string[];
+}
+
+export function todoRepository(query: QueryFunction): TodoRepository {
+  const read = async (id: TodoRecord["id"]): Promise<TodoRecordWithTags> => {
     const selectTodosWithTags = sql`
       SELECT
           td.id,
@@ -24,13 +32,14 @@ export function todoRepository(query: QueryFunction): Repository<TodosTable> {
       ) tags USING (id)
       WHERE td.id = ${id}`;
     const result = await query(selectTodosWithTags);
-    return result.rows[0] as TodoRecord;
+    return result.rows[0] as TodoRecordWithTags;
   };
+
   const create = async (
     data: NewTableRow<TodosTable>,
   ): Promise<TableRow<TodosTable>> => {
     const result = await query(
-      sql`INSERT INTO todos ${spreadInsert(data)} RETURNING *`,
+      sql`INSERT INTO todos ${spreadInsert(data)} RETURNING "id"`,
     );
     return result.rows[0] as TableRow<TodosTable>;
   };
@@ -40,14 +49,14 @@ export function todoRepository(query: QueryFunction): Repository<TodosTable> {
     data: Partial<NewTableRow<TodosTable>>,
   ): Promise<TableRow<TodosTable>> => {
     const result = await query(
-      sql`UPDATE todos SET ${spreadUpdate(data)} WHERE id = ${id} RETURNING *`,
+      sql`UPDATE todos SET ${spreadUpdate(data)} WHERE "id" = ${id} RETURNING "id"`,
     );
     return result.rows[0] as TableRow<TodosTable>;
   };
 
   const remove = async (id: number): Promise<ID> => {
     const result = await query(
-      sql`DELETE FROM todos WHERE id = ${id} RETURNING id`,
+      sql`DELETE FROM todos WHERE "id" = ${id} RETURNING "id"`,
     );
     return result.rows[0] as ID;
   };
@@ -57,5 +66,15 @@ export function todoRepository(query: QueryFunction): Repository<TodosTable> {
     return result.rows as TableRow<TodosTable>[];
   };
 
-  return { create, read, update, remove, all };
+  const setTags = async (todoId: number, tagIds: number[]) => {
+    const insertTags = sql`
+      INSERT INTO todo_tags (todo_id, tag_id)
+        SELECT ${todoId}, unnest(${tagIds}::int[])
+        ON CONFLICT (todo_id, tag_id) DO NOTHING
+      RETURNING todo_id as id`;
+    const result = await query(insertTags);
+    return result.rows[0] as ID;
+  };
+
+  return { create, read, update, remove, all, setTags };
 }

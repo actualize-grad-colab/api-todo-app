@@ -8,7 +8,7 @@ const TodoStatusValues = ["canceled", "pending", "active", "copmplete"];
 const table = defineTable("todos", {
   id: Schema.Number,
   title: Schema.String,
-  body: Schema.nullable(Schema.Number),
+  body: Schema.Number,
   status: Schema.Enum(TodoStatusValues),
   user_id: Schema.Number,
 });

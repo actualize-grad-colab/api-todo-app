@@ -5,7 +5,7 @@ import { TagsTable } from "../models/tag";
 
 export function tagRepository(query: QueryFunction): Repository<TagsTable> {
   const read = async (id: number) => {
-    const result = await query(sql`SELECT * FROM tags WHERE id = ${id}`);
+    const result = await query(sql`SELECT * FROM tags WHERE "id" = ${id}`);
     return result.rows[0] as TableRow<TagsTable>;
   };
 
@@ -13,7 +13,7 @@ export function tagRepository(query: QueryFunction): Repository<TagsTable> {
     data: NewTableRow<TagsTable>,
   ): Promise<TableRow<TagsTable>> => {
     const result = await query(
-      sql`INSERT INTO tags ${spreadInsert(data)} RETURNING *`,
+      sql`INSERT INTO tags ${spreadInsert(data)} RETURNING "id"`,
     );
     return result.rows[0] as TableRow<TagsTable>;
   };
@@ -23,14 +23,14 @@ export function tagRepository(query: QueryFunction): Repository<TagsTable> {
     data: Partial<NewTableRow<TagsTable>>,
   ): Promise<TableRow<TagsTable>> => {
     const result = await query(
-      sql`UPDATE tags SET ${spreadUpdate(data)} WHERE id = ${id} RETURNING *`,
+      sql`UPDATE tags SET ${spreadUpdate(data)} WHERE "id" = ${id} RETURNING "id"`,
     );
     return result.rows[0] as TableRow<TagsTable>;
   };
 
   const remove = async (id: number): Promise<ID> => {
     const result = await query(
-      sql`DELETE FROM tags WHERE id = ${id} RETURNING id`,
+      sql`DELETE FROM tags WHERE "id" = ${id} RETURNING "id"`,
     );
     return result.rows[0] as ID;
   };

@@ -9,14 +9,14 @@ function setup(repo: Repository<TodosTable>): Router {
   router.get("/", (_req: Request, res: Response): void => {
     void (async (): Promise<void> => {
       const todos = await repo.all();
-      res.send({ todos });
+      res.send({ data: { todos } });
     })();
   });
 
   router.get("/:id", (req: Request, res: Response): void => {
     void (async (): Promise<void> => {
       const todos = await repo.read(parseInt(req.params.id));
-      res.send({ todos });
+      res.send({ data: { todos } });
     })();
   });
 
@@ -25,7 +25,9 @@ function setup(repo: Repository<TodosTable>): Router {
       // FIXME:  Hardcoded user_id
       const body = req.body as NewTableRow<TodosTable>;
       const todos = await repo.create({ ...body, user_id: 1 });
-      res.status(201).send({ todos });
+      // NOTE: something like
+      // res.status(201).success("New todo created successfully").data({ todos }).send();
+      res.status(201).send({ data: { todos } });
     })();
   });
 
@@ -33,7 +35,7 @@ function setup(repo: Repository<TodosTable>): Router {
     void (async (): Promise<void> => {
       const body = req.body as Partial<TableRow<TodosTable>>;
       const todos = await repo.update(parseInt(req.params.id), body);
-      res.send({ todos });
+      res.send({ data: { todos } });
     })();
   });
 
