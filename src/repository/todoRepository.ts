@@ -4,7 +4,7 @@ import { sql } from "squid/pg";
 import { NewTableRow, TableRow } from "squid";
 import { spreadInsert, spreadUpdate } from "squid/pg";
 
-interface TodoRepository extends Repository<TodosTable> {
+export interface TodoRepository extends Repository<TodosTable> {
   setTags: (todoId: number, tagIds: number[]) => Promise<ID>;
 }
 
@@ -70,8 +70,7 @@ export function todoRepository(query: QueryFunction): TodoRepository {
     const insertTags = sql`
       INSERT INTO todo_tags (todo_id, tag_id)
         SELECT ${todoId}, unnest(${tagIds}::int[])
-        ON CONFLICT (todo_id, tag_id) DO NOTHING
-      RETURNING todo_id as id`;
+        ON CONFLICT (todo_id, tag_id) DO NOTHING`;
     const result = await query(insertTags);
     return result.rows[0] as ID;
   };

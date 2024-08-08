@@ -2,8 +2,9 @@ import { Router, Request, Response } from "express";
 import { Repository } from "../repository/iRepository";
 import { TodosTable } from "../models/todo";
 import { NewTableRow, TableRow } from "squid";
+import { TodoRepository } from "../repository/todoRepository";
 
-function setup(repo: Repository<TodosTable>): Router {
+function setup(repo: TodoRepository): Router {
   const router = Router();
 
   router.get("/", (_req: Request, res: Response): void => {
@@ -28,6 +29,16 @@ function setup(repo: Repository<TodosTable>): Router {
       // NOTE: something like
       // res.status(201).success("New todo created successfully").data({ todos }).send();
       res.status(201).send({ data: { todos } });
+    })();
+  });
+
+  router.post("/:todo_id/tags/:tag_id", (req: Request, res: Response): void => {
+    // TODO: Secure once app supports users; same as the "fixme" above
+    void (async (): Promise<void> => {
+      await repo.setTags(parseInt(req.params.todo_id), [
+        parseInt(req.params.tag_id),
+      ]);
+      res.status(201).send({ data: {} });
     })();
   });
 

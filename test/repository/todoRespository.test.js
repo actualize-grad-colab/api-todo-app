@@ -187,7 +187,6 @@ describe("todoRepository", () => {
         INSERT INTO todo_tags (todo_id, tag_id)
           SELECT $1, unnest($2::int[])
           ON CONFLICT (todo_id, tag_id) DO NOTHING
-        RETURNING todo_id as id
         `),
       values: [1, [1, 2, 3]],
     };
